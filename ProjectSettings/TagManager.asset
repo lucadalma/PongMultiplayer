@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GoalP1
   - GoalP2
+  - BarPlayer
   layers:
   - Default
   - TransparentFX
