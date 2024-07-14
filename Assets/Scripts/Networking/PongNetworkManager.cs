@@ -12,6 +12,7 @@ public class PongNetworkManager : NetworkManager
     [Space(10)]
     [Header("Pong")]
     [SerializeField] private GameObject barPrefab;
+    [SerializeField] private GameObject ballPrefab;
     [SerializeField] private GameOverHandler gameOverHandlerPrefab;
 
     public static event Action ClientOnConnected;
@@ -55,6 +56,9 @@ public class PongNetworkManager : NetworkManager
                 GameObject barInstance = Instantiate(barPrefab, GetStartPosition().position, Quaternion.identity);
                 NetworkServer.Spawn(barInstance, player.connectionToClient);
             }
+
+            GameObject ball = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
+            NetworkServer.Spawn(ball);
 
         }
     }

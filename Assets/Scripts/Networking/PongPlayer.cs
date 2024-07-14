@@ -6,6 +6,10 @@ using System;
 
 public class PongPlayer : NetworkBehaviour
 {
+    private Bar myBar = new Bar();
+
+    public Bar MyBar { get { return myBar; } }
+
     [SyncVar(hook = nameof(ClientHandlePointUpdated))]
     private int points = 0;
     [SyncVar(hook = nameof(AuthorityHandlePartyOwnerStateUpdated))]
@@ -27,67 +31,31 @@ public class PongPlayer : NetworkBehaviour
     #region Server
     public override void OnStartServer()
     {
-        //Unit.ServerOnUnitSpawned += ServerHandleUnitSpawned;
-        //Unit.ServerOnUnitDespawned += ServerHandleUnitDespawned;
-        //Building.ServerOnBuildingSpawned += ServerHandleBuildingSpawned;
-        //Building.ServerOnBuildingDespawned += ServerHandleBuildingDespawned;
+        Bar.ServerOnBarSpawned += ServerHandleBarSpawned;
+        Bar.ServerOnBarDespawned += ServerHandleBarDespawned;
 
         DontDestroyOnLoad(gameObject);
     }
 
     public override void OnStopServer()
     {
-    //    Unit.ServerOnUnitSpawned -= ServerHandleUnitSpawned;
-    //    Unit.ServerOnUnitDespawned -= ServerHandleUnitDespawned;
-    //    Building.ServerOnBuildingSpawned -= ServerHandleBuildingSpawned;
-    //    Building.ServerOnBuildingDespawned -= ServerHandleBuildingDespawned;
+        Bar.ServerOnBarSpawned -= ServerHandleBarSpawned;
+        Bar.ServerOnBarDespawned -= ServerHandleBarDespawned;
     }
 
-    //private void ServerHandleUnitSpawned(Unit unit)
-    //{
-    //    if (unit.connectionToClient.connectionId != connectionToClient.connectionId) return;
+    private void ServerHandleBarSpawned(Bar bar)
+    {
+        if (bar.connectionToClient.connectionId != connectionToClient.connectionId) return;
 
-    //    myUnits.Add(unit);
-    //}
+        myBar = bar;
+    }
 
-    //private void ServerHandleUnitDespawned(Unit unit)
-    //{
-    //    if (unit.connectionToClient.connectionId != connectionToClient.connectionId) return;
+    private void ServerHandleBarDespawned(Bar bar)
+    {
+        if (bar.connectionToClient.connectionId != connectionToClient.connectionId) return;
 
-    //    myUnits.Remove(unit);
-    //}
-
-    //private void ServerHandleBuildingSpawned(Building building)
-    //{
-    //    if (building.connectionToClient.connectionId != connectionToClient.connectionId) return;
-
-    //    myBuildings.Add(building);
-    //}
-
-    //private void ServerHandleBuildingDespawned(Building building)
-    //{
-    //    if (building.connectionToClient.connectionId != connectionToClient.connectionId) return;
-
-    //    myBuildings.Remove(building);
-    //}
-
-    //public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 point)
-    //{
-    //    if (Physics.CheckBox
-    //        (point + buildingCollider.center, buildingCollider.size / 2, Quaternion.identity, buildingBlockLayer))
-    //        return false;
-
-
-    //    foreach (Building building in myBuildings)
-    //    {
-    //        if ((point - building.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit)
-    //        {
-    //            return true;
-    //        }
-    //    }
-
-    //    return false;
-    //}
+        myBar = null;
+    }
 
     [Command]
     public void CmdStartGame()
@@ -146,40 +114,29 @@ public class PongPlayer : NetworkBehaviour
     {
         if (NetworkServer.active) return;
 
-        //Unit.AuthorityOnUnitSpawned += AuthorityHandleUnitSpawned;
-        //Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
+        Bar.AuthorityOnBarSpawned += AuthorityHandleBarSpawned;
+        Bar.AuthorityOnBarDespawned += AuthorityHandlBarDespawned;
 
-        //Building.AuthorityOnBuildingSpawned += AuthorityHandleBuildingSpawned;
-        //Building.AuthorityOnBuildingDespawned += AuthorityHandleBuildingDespawned;
     }
 
     public override void OnStopAuthority()
     {
         if (!isClientOnly) return;
 
-        //Unit.AuthorityOnUnitSpawned -= AuthorityHandleUnitSpawned;
-        //Unit.AuthorityOnUnitDespawned -= AuthorityHandleUnitDespawned;
+        Bar.AuthorityOnBarSpawned -= AuthorityHandleBarSpawned;
+        Bar.AuthorityOnBarDespawned -= AuthorityHandlBarDespawned;
     }
 
-    //private void AuthorityHandleUnitSpawned(Unit unit)
-    //{
-    //    myUnits.Add(unit);
-    //}
+    private void AuthorityHandleBarSpawned(Bar bar)
+    {
+        myBar = bar;
+    }
 
-    //private void AuthorityHandleUnitDespawned(Unit unit)
-    //{
-    //    myUnits.Remove(unit);
-    //}
+    private void AuthorityHandlBarDespawned(Bar bar)
+    {
+        myBar = null;
+    }
 
-    //private void AuthorityHandleBuildingSpawned(Building building)
-    //{
-    //    myBuildings.Add(building);
-    //}
-
-    //private void AuthorityHandleBuildingDespawned(Building building)
-    //{
-    //    myBuildings.Remove(building);
-    //}
 
     private void AuthorityHandlePartyOwnerStateUpdated(bool oldState, bool newState)
     {

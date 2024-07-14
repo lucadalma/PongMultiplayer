@@ -9,15 +9,11 @@ public class BarMovement : NetworkBehaviour
 
     #region Server
 
-    [ServerCallback]
-    private void Update()
+    [Server]
+    void MovementPlayer(Vector3 position)
     {
-        MovementPlayer();
-        LimiteBordiPlayer();
-    }
+        gameObject.transform.Translate(position);
 
-    void LimiteBordiPlayer()
-    {
         if (gameObject.transform.position.y >= 3)
         {
             gameObject.transform.position = new Vector2(gameObject.transform.position.x, 3);
@@ -29,14 +25,10 @@ public class BarMovement : NetworkBehaviour
 
     }
 
-
-    void MovementPlayer()
+    [Command]
+    public void CmdMove(Vector3 position)
     {
-        float yMovement = Input.GetAxis("Vertical");
-
-        Vector3 movementVector = new Vector2(0, yMovement);
-
-        gameObject.transform.Translate(movementVector * speed * Time.deltaTime);
+        MovementPlayer(position);
     }
 
     #endregion
