@@ -32,6 +32,7 @@ public class Goal : NetworkBehaviour
     {
         if (collision.transform.CompareTag("Ball"))
         {
+            if (player == null) return;
             player.SetPoints(player.Points + 1);
             Debug.Log("Goal: " + player.connectionToClient.connectionId + " Points: " + player.Points);
         }
