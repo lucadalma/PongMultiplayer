@@ -655,6 +655,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 202808826561078037, guid: ff32e4d3d7429ba49a9d480954243938, type: 3}
     - target: {fileID: 7000692822953975542, guid: 8925d4f68371c1f45bb4304aa8eaef6f, type: 3}
+      propertyPath: goalPrefab
+      value: 
+      objectReference: {fileID: 8159766506626800952, guid: 8fee41bce9cf0e5419a115e47cba3eba, type: 3}
+    - target: {fileID: 7000692822953975542, guid: 8925d4f68371c1f45bb4304aa8eaef6f, type: 3}
       propertyPath: offlineScene
       value: Assets/Scenes/Main_Menu.unity
       objectReference: {fileID: 0}
@@ -668,7 +672,7 @@ PrefabInstance:
       objectReference: {fileID: 3558613898338954271, guid: 79458677cfe6cd244ae9f4370bb35366, type: 3}
     - target: {fileID: 7000692822953975542, guid: 8925d4f68371c1f45bb4304aa8eaef6f, type: 3}
       propertyPath: spawnPrefabs.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7000692822953975542, guid: 8925d4f68371c1f45bb4304aa8eaef6f, type: 3}
       propertyPath: spawnPrefabs.Array.data[0]
@@ -682,6 +686,10 @@ PrefabInstance:
       propertyPath: spawnPrefabs.Array.data[2]
       value: 
       objectReference: {fileID: 202808826561078037, guid: ff32e4d3d7429ba49a9d480954243938, type: 3}
+    - target: {fileID: 7000692822953975542, guid: 8925d4f68371c1f45bb4304aa8eaef6f, type: 3}
+      propertyPath: spawnPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 8159766506626800952, guid: 8fee41bce9cf0e5419a115e47cba3eba, type: 3}
     - target: {fileID: 7000692822953975543, guid: 8925d4f68371c1f45bb4304aa8eaef6f, type: 3}
       propertyPath: m_Enabled
       value: 0

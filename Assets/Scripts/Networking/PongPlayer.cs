@@ -8,7 +8,12 @@ public class PongPlayer : NetworkBehaviour
 {
     private Bar myBar = new Bar();
 
+    private Goal myGoal = new Goal();
+
     public Bar MyBar { get { return myBar; } }
+
+    public Goal MyGoal { get { return myGoal; } }
+
 
     [SyncVar(hook = nameof(ClientHandlePointUpdated))]
     private int points = 0;
@@ -24,7 +29,7 @@ public class PongPlayer : NetworkBehaviour
     public bool IsPartyOwner { get { return isPartyOwner; } }
     public string PlayerName { get { return playerName; } }
 
-    public event Action<int> ClientOnResourceUpdated;
+    public static event Action<int> ClientOnPointUpdated;
     public static event Action<bool> AuthorityOnPartyOwnerStateUpdated;
     public static event Action ClientOnInfoUpdated;
 
@@ -33,6 +38,9 @@ public class PongPlayer : NetworkBehaviour
     {
         Bar.ServerOnBarSpawned += ServerHandleBarSpawned;
         Bar.ServerOnBarDespawned += ServerHandleBarDespawned;
+        Goal.ServerOnGoalSpawned += ServerHandleGoalSpawned;
+        Goal.ServerOnGoalDespawned += ServerHandleGoalDespawned;
+
 
         DontDestroyOnLoad(gameObject);
     }
@@ -41,6 +49,8 @@ public class PongPlayer : NetworkBehaviour
     {
         Bar.ServerOnBarSpawned -= ServerHandleBarSpawned;
         Bar.ServerOnBarDespawned -= ServerHandleBarDespawned;
+        Goal.ServerOnGoalSpawned -= ServerHandleGoalSpawned;
+        Goal.ServerOnGoalDespawned -= ServerHandleGoalDespawned;
     }
 
     private void ServerHandleBarSpawned(Bar bar)
@@ -55,6 +65,20 @@ public class PongPlayer : NetworkBehaviour
         if (bar.connectionToClient.connectionId != connectionToClient.connectionId) return;
 
         myBar = null;
+    }
+
+    private void ServerHandleGoalSpawned(Goal goal)
+    {
+        if (goal.connectionToClient.connectionId != connectionToClient.connectionId) return;
+
+        myGoal = goal;
+    }
+
+    private void ServerHandleGoalDespawned(Goal goal)
+    {
+        if (goal.connectionToClient.connectionId != connectionToClient.connectionId) return;
+
+        myGoal = null;
     }
 
     [Command]
@@ -116,6 +140,8 @@ public class PongPlayer : NetworkBehaviour
 
         Bar.AuthorityOnBarSpawned += AuthorityHandleBarSpawned;
         Bar.AuthorityOnBarDespawned += AuthorityHandlBarDespawned;
+        Goal.AuthorityOnGoalSpawned += AuthorityHandleGoalSpawned;
+        Goal.AuthorityOnGoalDespawned += AuthorityHandlGoalDespawned;
 
     }
 
@@ -125,6 +151,8 @@ public class PongPlayer : NetworkBehaviour
 
         Bar.AuthorityOnBarSpawned -= AuthorityHandleBarSpawned;
         Bar.AuthorityOnBarDespawned -= AuthorityHandlBarDespawned;
+        Goal.AuthorityOnGoalSpawned -= AuthorityHandleGoalSpawned;
+        Goal.AuthorityOnGoalDespawned -= AuthorityHandlGoalDespawned;
     }
 
     private void AuthorityHandleBarSpawned(Bar bar)
@@ -137,6 +165,16 @@ public class PongPlayer : NetworkBehaviour
         myBar = null;
     }
 
+    private void AuthorityHandleGoalSpawned(Goal goal)
+    {
+        myGoal = goal;
+    }
+
+    private void AuthorityHandlGoalDespawned(Goal goal)
+    {
+        myGoal = null;
+    }
+
 
     private void AuthorityHandlePartyOwnerStateUpdated(bool oldState, bool newState)
     {
@@ -147,7 +185,7 @@ public class PongPlayer : NetworkBehaviour
 
     private void ClientHandlePointUpdated(int oldPoint, int newPoint)
     {
-        ClientOnResourceUpdated?.Invoke(newPoint);
+        ClientOnPointUpdated?.Invoke(newPoint);
     }
 
     private void ClientHandlePlayerNameUpdated(string oldName, string newName)

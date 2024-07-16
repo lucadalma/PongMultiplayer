@@ -9,8 +9,12 @@ public class BallScript : NetworkBehaviour
 
     [SerializeField] int force = 10;
 
-    public int Force { get { return force; } }
+    [SerializeField] float accelerationFactor = 1.1f;
 
+    private PongPlayer player;
+
+
+    public int Force { get { return force; } }
 
     void Start()
     {
@@ -35,20 +39,20 @@ public class BallScript : NetworkBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.CompareTag("GoalP1"))
+        if (collision.transform.CompareTag("Goal"))
         {
-            ResetBall();
-            LaunchBall();
-        }
-        else if (collision.transform.CompareTag("GoalP2"))
-        {
+
             ResetBall();
             LaunchBall();
         }
 
         if (collision.transform.CompareTag("BarPlayer"))
         {
-            rb.velocity += new Vector2(2,0);
+            Vector2 currentVelocity = rb.velocity;
+
+            Vector2 newVelocity = currentVelocity * accelerationFactor;
+
+            rb.velocity = newVelocity;
         }
     }
 }

@@ -6,44 +6,44 @@ using Mirror;
 
 public class GameOverHandler : NetworkBehaviour
 {
-    //private List<UnitBase> bases = new List<UnitBase>();
+    public List<Goal> goals = new List<Goal>();
 
     public static event Action ServerOnGameOver;
     public static event Action<string> ClientOnGameOver;
 
     #region Server
 
-    //public override void OnStartServer()
-    //{
-    //    UnitBase.ServerOnBaseSpawned += ServerHandleBaseSpawned;
-    //    UnitBase.ServerOnBaseDespawned += ServerHandleBaseDespawned;
-    //}
+    public override void OnStartServer()
+    {
+        Goal.ServerOnGoalSpawned += ServerHandleGoalSpawned;
+        Goal.ServerOnGoalDespawned += ServerHandleGoalDespawned;
+    }
 
 
-    //public override void OnStopServer()
-    //{
-    //    UnitBase.ServerOnBaseSpawned -= ServerHandleBaseSpawned;
-    //    UnitBase.ServerOnBaseDespawned -= ServerHandleBaseDespawned;
-    //}
+    public override void OnStopServer()
+    {
+        Goal.ServerOnGoalSpawned -= ServerHandleGoalSpawned;
+        Goal.ServerOnGoalDespawned -= ServerHandleGoalDespawned;
+    }
 
-    //[Server]
-    //private void ServerHandleBaseSpawned(UnitBase unitBase)
-    //{
-    //    bases.Add(unitBase);
-    //}
+    [Server]
+    private void ServerHandleGoalSpawned(Goal goal)
+    {
+        goals.Add(goal);
+    }
 
-    //[Server]
-    //private void ServerHandleBaseDespawned(UnitBase unitBase)
-    //{
-    //    bases.Remove(unitBase);
+    [Server]
+    private void ServerHandleGoalDespawned(Goal goal)
+    {
+        goals.Remove(goal);
 
-    //    if (bases.Count != 1) return;
+        if (goals.Count != 1) return;
 
-    //    int playerId = bases[0].connectionToClient.connectionId;
+        int playerId = goal.connectionToClient.connectionId;
 
-    //    RpcGameOver($"Player {playerId}");
-    //    ServerOnGameOver?.Invoke();
-    //}
+        RpcGameOver($"Player {playerId}");
+        ServerOnGameOver?.Invoke();
+    }
 
 
     #endregion

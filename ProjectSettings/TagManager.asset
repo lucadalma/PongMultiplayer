@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - GoalP1
-  - GoalP2
   - BarPlayer
+  - Goal
+  - Ball
   layers:
   - Default
   - TransparentFX

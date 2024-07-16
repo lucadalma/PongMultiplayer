@@ -13,6 +13,7 @@ public class PongNetworkManager : NetworkManager
     [Header("Pong")]
     [SerializeField] private GameObject barPrefab;
     [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private GameObject goalPrefab;
     [SerializeField] private GameOverHandler gameOverHandlerPrefab;
 
     public static event Action ClientOnConnected;
@@ -50,11 +51,27 @@ public class PongNetworkManager : NetworkManager
         {
             GameOverHandler gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
             NetworkServer.Spawn(gameOverHandlerInstance.gameObject);
+            int i = 0;
 
             foreach (PongPlayer player in Players)
             {
+                
                 GameObject barInstance = Instantiate(barPrefab, GetStartPosition().position, Quaternion.identity);
                 NetworkServer.Spawn(barInstance, player.connectionToClient);
+
+                if (i == 0)
+                {
+                    GameObject goalInstance = Instantiate(goalPrefab, new Vector3(9.8f, 0, 0), Quaternion.identity);
+                    NetworkServer.Spawn(goalInstance, player.connectionToClient);
+                }
+                else 
+                {
+                    GameObject goalInstance = Instantiate(goalPrefab, new Vector3(-9.8f, 0, 0), Quaternion.identity);
+                    NetworkServer.Spawn(goalInstance, player.connectionToClient);
+                }
+
+                i++;
+
             }
 
             GameObject ball = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
