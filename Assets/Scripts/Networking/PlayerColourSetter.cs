@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
+//classe per l'assegnazione di un colore ad inizio partita
 public class PlayerColourSetter : NetworkBehaviour
 {
     [SerializeField] private SpriteRenderer spriteColour = new SpriteRenderer();

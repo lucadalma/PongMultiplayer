@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Mirror;
-
+//classe per visualizzare la fine partita
 public class GameOverDisplay : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverDisplayParent;
